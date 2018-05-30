@@ -1,4 +1,7 @@
-import { AppRegistry } from 'react-native';
-import App from './App';
+import { AppRegistry } from "react-native";
+import ExternalServiceIntegrations from "./src/ExternalServiceIntegrations";
 
-AppRegistry.registerComponent('extensoMobile', () => App);
+AppRegistry.registerComponent(
+  "extensoMobile",
+  () => ExternalServiceIntegrations
+);

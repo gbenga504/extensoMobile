@@ -134,5 +134,5 @@ export default new Realm({
     CurrentPrices,
     Bookmark
   ],
-  schemaVersion: 5
+  schemaVersion: 1
 });

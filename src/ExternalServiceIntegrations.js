@@ -73,8 +73,7 @@ export default class ExternalServiceIntegrations extends React.PureComponent {
       <RealmProvider realm={realm}>
         <Provider store={store}>
           <KunyoraProvider client={client} store={client.store}>
-            {/* <Container>{isLoading ? <LoadingART /> : <App />}</Container> */}
-            <App />
+            <Container>{isLoading ? <LoadingART /> : <App />}</Container>
           </KunyoraProvider>
         </Provider>
       </RealmProvider>
