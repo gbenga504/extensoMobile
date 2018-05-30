@@ -1,20 +1,41 @@
 import React from "react";
-import { Animated, Easing, Dimensions, StyleSheet } from "react-native";
+import {
+  Animated,
+  Easing,
+  Dimensions,
+  StyleSheet,
+  AsyncStorage
+} from "react-native";
 import { Container } from "native-base";
+import { connect } from "react-redux";
 
 import { themes, ThemeContext } from "../context/ThemeContext";
 
-export default class ThemeContainer extends React.PureComponent {
+class ThemeProvider extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      theme: themes.light,
+      theme: props.theme,
       opacity: new Animated.Value(0),
       zIndex: 0,
       shouldComponentDisplay: false,
       toggleTheme: this.toggleTheme
     };
   }
+
+  configureApplicationTheme = () => {
+    let { theme } = this.state,
+      newTheme =
+        JSON.stringify(theme) == JSON.stringify(themes.dark)
+          ? themes.light
+          : themes.dark;
+    AsyncStorage.setItem("@extensoTheme", JSON.stringify(newTheme), error => {
+      //@Todo: Send data to analytics
+    });
+    this.setState({
+      theme: newTheme
+    });
+  };
 
   toggleTheme = () => {
     let { opacity } = this.state;
@@ -26,9 +47,7 @@ export default class ThemeContainer extends React.PureComponent {
         useNativeDriver: true
       }).start(animation => {
         if (animation.finished) {
-          this.setState(state => ({
-            theme: state.theme == themes.dark ? themes.light : themes.dark
-          }));
+          this.configureApplicationTheme();
           Animated.timing(opacity, {
             duration: 1000,
             toValue: 0,
@@ -68,6 +87,14 @@ export default class ThemeContainer extends React.PureComponent {
     );
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    theme: state.applicationTheme
+  };
+}
+
+export default connect(mapStateToProps)(ThemeProvider);
 
 const styles = StyleSheet.create({
   animatedView: {

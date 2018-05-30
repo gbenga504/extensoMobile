@@ -6,7 +6,6 @@ import moment from "moment";
 
 import { LightText } from "../../AppText";
 import Icon from "../../Icon";
-import Colors from "../../../assets/Colors";
 import { permutateReadingTime } from "../../../utils";
 import realm from "../../../realm.schema";
 import Fonts from "../../../assets/Fonts";
@@ -17,11 +16,6 @@ const StyledContainer = styled.View`
   margin-top: 10;
   align-items: center;
   flex-direction: row;
-`;
-const StyledLikesText = LightText.extend`
-  font-size: 14;
-  color: ${Colors.day.cards.likesText};
-  margin-left: 3;
 `;
 
 export default class Footer extends React.PureComponent {
@@ -34,7 +28,7 @@ export default class Footer extends React.PureComponent {
     item: PropTypes.shape({
       id: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
-      content: PropTypes.string.isRequired,
+      short_content: PropTypes.string.isRequired,
       category: PropTypes.string.isRequired,
       tags: PropTypes.any,
       created_at: PropTypes.string.isRequired,

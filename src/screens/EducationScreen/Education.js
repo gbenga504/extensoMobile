@@ -28,14 +28,18 @@ class Education extends React.PureComponent {
         realm.write(() => {
           _newFeeds.map((feed, i) => {
             (feed => {
-              realm.create(
-                "Education",
-                Object.assign({}, feed, {
-                  bookmarked: false,
-                  schemaType: "Education",
-                  oid: parseInt(moment(feed.created_at).format("x"))
-                })
-              );
+              let _obj = realm
+                .objects("Education")
+                .filtered(`id = "${feed.id}"`)[0];
+              !_obj &&
+                realm.create(
+                  "Education",
+                  Object.assign({}, feed, {
+                    bookmarked: false,
+                    schemaType: "Education",
+                    oid: parseInt(moment(feed.created_at).format("x"))
+                  })
+                );
             })(feed);
           });
         });

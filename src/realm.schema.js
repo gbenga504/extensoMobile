@@ -31,7 +31,7 @@ Education.schema = {
     oid: { type: "int", indexed: true },
     id: "string",
     title: "string",
-    content: "string",
+    short_content: "string",
     category: "string",
     tags: "string[]",
     draft: "bool",
@@ -51,7 +51,7 @@ Information.schema = {
     oid: { type: "int", indexed: true },
     id: "string",
     title: "string",
-    content: "string",
+    short_content: "string",
     category: "string",
     tags: "string[]",
     draft: "bool",
@@ -71,7 +71,7 @@ Opportunities.schema = {
     oid: { type: "int", indexed: true },
     id: "string",
     title: "string",
-    content: "string",
+    short_content: "string",
     category: "string",
     tags: "string[]",
     draft: "bool",
@@ -91,7 +91,7 @@ CurrentPrices.schema = {
     oid: { type: "int", indexed: true },
     id: "string",
     title: "string",
-    content: "string",
+    short_content: "string",
     category: "string",
     tags: "string[]",
     draft: "bool",
@@ -111,7 +111,7 @@ Bookmark.schema = {
     oid: { type: "int", indexed: true },
     id: "string",
     title: "string",
-    content: "string",
+    short_content: "string",
     category: "string",
     tags: "string[]",
     draft: "bool",
@@ -134,5 +134,5 @@ export default new Realm({
     CurrentPrices,
     Bookmark
   ],
-  schemaVersion: 1
+  schemaVersion: 11
 });

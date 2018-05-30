@@ -33,7 +33,7 @@ export default class ContentCard extends React.PureComponent {
     item: PropTypes.shape({
       id: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
-      content: PropTypes.string.isRequired,
+      short_content: PropTypes.string.isRequired,
       category: PropTypes.string.isRequired,
       tags: PropTypes.any,
       created_at: PropTypes.string.isRequired,
@@ -67,7 +67,7 @@ export default class ContentCard extends React.PureComponent {
           imageWidth !== 0 && (
             <StyledImage
               source={{
-                uri: `http://res.cloudinary.com/gbenga504/image/upload/c_crop,g_center,h_200,w_${imageWidth}/${src}`
+                uri: `http://res.cloudinary.com/gbenga504/image/upload/c_scale,h_${imageWidth},w_${imageWidth}/${src}`
               }}
             />
           )}

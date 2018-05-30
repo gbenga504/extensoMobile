@@ -13,7 +13,8 @@ export const themes = {
     foregroundColor: "#fff",
     backgroundColor: "#fff",
     seperatorColor: "#e0e0e0",
-    errorTextAndIcons: "#bdbdbd"
+    errorTextAndIcons: "#bdbdbd",
+    placeholderTextColor: "#37474f"
   },
   dark: {
     tabIndicatorColor: "#1da1f2",
@@ -27,7 +28,8 @@ export const themes = {
     foregroundColor: "#37474f",
     backgroundColor: "#263238",
     seperatorColor: "#14171a",
-    errorTextAndIcons: "#1da1f2"
+    errorTextAndIcons: "#1da1f2",
+    placeholderTextColor: "#78909c"
   }
 };
 

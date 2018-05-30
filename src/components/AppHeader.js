@@ -65,12 +65,12 @@ export default class AppHeader extends React.PureComponent {
                   </StyledTitle>
                 </StyledLeft>
                 <Right style={styles.right}>
-                  <Icon
+                  {/* <Icon
                     onPress={() => null}
                     name="droplet"
                     type="feather-icon"
                     style={{ fontSize: Fonts.icons, color: iconUnactiveColor }}
-                  />
+                  /> */}
                 </Right>
               </StyledHeader>
             )}

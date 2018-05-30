@@ -1,6 +1,6 @@
 import React from "react";
 import { Content } from "native-base";
-import { View } from "react-native";
+import { View, Text } from "react-native";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Query } from "react-kunyora";
@@ -47,25 +47,14 @@ export default class ContentView extends React.PureComponent {
       contentCard: [],
       schemaType: undefined,
       bookmarked: false,
+      imageWidth: 0,
       shouldComponentDisplay: false,
-      categoryColor: ContentView.defaults.colors[Math.floor(Math.random() * 6)]
+      categoryColor: ContentView.defaults.colors[Math.floor(Math.random() * 2)]
     };
   }
 
-  state = {
-    imageWidth: 0
-  };
-
   static defaults = {
-    colors: [
-      "#605CA9",
-      "#932290",
-      "#39B979",
-      "#764B1F",
-      "#F2651C",
-      "#127C2C",
-      "#9F0306"
-    ]
+    colors: ["#4caf50", "#2196f3", "#ff5722"]
   };
 
   static propTypes = {
@@ -132,16 +121,27 @@ export default class ContentView extends React.PureComponent {
   };
 
   renderNode = (node, index, siblings, parent, defaultRenderer) => {
+    let { imageWidth } = this.state;
     if (node.attribs && node.attribs.publicid && node.name == "img") {
       return (
         <StyledImage
           key={index}
           source={{
-            uri: `http://res.cloudinary.com/gbenga504/image/upload/c_crop,g_center,h_200,w_200/${
+            uri: `https://res.cloudinary.com/gbenga504/image/upload/c_scale,h_${imageWidth},w_${imageWidth}/${
               node.attribs.publicid
             }`
           }}
         />
+      );
+    } else if (node.name == "figure") {
+      return (
+        <ThemeContext.Consumer key={index}>
+          {({ theme: { imageBackgroundColor } }) => (
+            <StyledImageContainer backgroundColor={imageBackgroundColor}>
+              {defaultRenderer(node.children, parent)}
+            </StyledImageContainer>
+          )}
+        </ThemeContext.Consumer>
       );
     }
   };
@@ -153,19 +153,16 @@ export default class ContentView extends React.PureComponent {
     );
   };
 
-  renderBody = (content, textColor) => {
-    const html = `<p>${content}</p>`;
-    return (
-      <StyledContentContainer>
-        <CustomHTMLView
-          onLinkPress={this.onLinkPress}
-          html={html}
-          style={BodyStyles({ color: textColor })}
-          renderNode={this.renderNode}
-        />
-      </StyledContentContainer>
-    );
-  };
+  renderBody = (content, textColor) => (
+    <StyledContentContainer>
+      <CustomHTMLView
+        onLinkPress={this.onLinkPress}
+        html={content}
+        style={BodyStyles({ color: textColor })}
+        renderNode={this.renderNode}
+      />
+    </StyledContentContainer>
+  );
 
   renderOtherContent = () => {
     let { contentCard, schemaType } = this.state,

@@ -26,7 +26,7 @@ export default class Footer extends React.PureComponent {
     item: PropTypes.shape({
       id: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
-      content: PropTypes.string.isRequired,
+      short_content: PropTypes.string.isRequired,
       category: PropTypes.string.isRequired,
       tags: PropTypes.any,
       created_at: PropTypes.string.isRequired,

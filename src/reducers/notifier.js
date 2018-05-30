@@ -15,10 +15,21 @@ export const readingMode = (state = "day", action) => {
 export const toastNotification = (state = {}, action) => {
   switch (action.type) {
     case types.SET_TOAST_NOTIFICATION:
-      return { ...state, id: action.id, message: action.message }
+      return { ...state, id: action.id, message: action.message };
       break;
     default:
       return state;
       break;
   }
-}
+};
+
+export const applicationTheme = (state = {}, action) => {
+  switch (action.type) {
+    case types.SET_APPLICATION_THEME:
+      return { ...state, ...action.theme };
+      break;
+    default:
+      return state;
+      break;
+  }
+};

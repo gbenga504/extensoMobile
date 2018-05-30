@@ -2,86 +2,101 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Header, Item, Input } from "native-base";
-import { StyleSheet } from "react-native";
+import { StatusBar } from "react-native";
 
-import Button from "./Button";
 import Icon from "./Icon";
-import Colors from "../assets/Colors";
-import ReadingMode from "../containers/ReadingMode";
+import { NavigationContext } from "../context/NavigationContext";
+import { ThemeContext } from "../context/ThemeContext";
+import Fonts from "../assets/Fonts";
 
 const StyledHeader = styled(Header)`
   background-color: ${props => props.backgroundColor};
 `;
 
-class SearchHeader extends Component {
+export default class SearchHeader extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: this.props.searchValue || ""
+      value: props.searchValue || ""
     };
   }
 
   static propTypes = {
     ...Header.propTypes,
     onSearch: PropTypes.func.isRequired,
-    onClose: PropTypes.func,
     searchValue: PropTypes.string
   };
 
-  static contextTypes = {
-    navigation: PropTypes.object
-  };
-
   render() {
-    let { navigation: { goBack } } = this.context,
-      { readingMode: { defaultStatusBar, defaultScreenHeader } } = this.props;
+    let { onSearch, onEnter } = this.props,
+      { value } = this.state;
     return (
-      <StyledHeader
-        searchBar
-        noShadow
-        androidStatusBarColor={defaultStatusBar}
-        backgroundColor={defaultScreenHeader}
-      >
-        <Item>
-          <Icon
-            onPress={() => goBack()}
-            name="chevron-left"
-            type="feather-icon"
-            style={styles.icon}
-          />
-          <Input
-            placeholder="Search"
-            onChangeText={value => {
-              this.setState({ value });
-              this.props.onSearch(value);
-            }}
-            returnKeyType="search"
-            onBlur={() => this.props.onEnter(this.state.value)}
-            value={this.state.value}
-          />
-          {this.state.value.length > 0 && (
-            <Icon
-              name="x"
-              type="feather-icon"
-              onPress={() => {
-                this.setState({ value: "" });
-                this.props.onSearch("");
-              }}
-              style={styles.icon}
-            />
-          )}
-        </Item>
-      </StyledHeader>
+      <NavigationContext.Consumer>
+        {({ navigation: { goBack } }) => (
+          <ThemeContext.Consumer>
+            {({
+              theme: {
+                statusBarColor,
+                statusBarStyle,
+                iconActiveColor,
+                foregroundColor,
+                placeholderTextColor,
+                seperatorColor
+              }
+            }) => (
+              <StyledHeader
+                searchBar
+                noShadow
+                androidStatusBarColor={statusBarColor}
+                backgroundColor={foregroundColor}
+                style={{
+                  borderBottomWidth: 0.5,
+                  borderBottomColor: seperatorColor
+                }}
+              >
+                <StatusBar
+                  barStyle={statusBarStyle}
+                  backgroundColor={statusBarColor}
+                />
+                <Item style={{ backgroundColor: foregroundColor }}>
+                  <Icon
+                    onPress={() => goBack()}
+                    name="chevron-left"
+                    type="feather-icon"
+                    style={{ fontSize: Fonts.icons, color: iconActiveColor }}
+                  />
+                  <Input
+                    placeholder="Search"
+                    placeholderTextColor={placeholderTextColor}
+                    onChangeText={value => {
+                      this.setState({ value });
+                      onSearch(value);
+                    }}
+                    style={{
+                      color: iconActiveColor,
+                      fontFamily: "FreightTextProBold"
+                    }}
+                    returnKeyType="search"
+                    onBlur={() => onEnter(value)}
+                    value={value}
+                  />
+                  {value.length > 0 && (
+                    <Icon
+                      name="x"
+                      type="feather-icon"
+                      onPress={() => {
+                        this.setState({ value: "" });
+                        onSearch("");
+                      }}
+                      style={{ fontSize: Fonts.icons, color: iconActiveColor }}
+                    />
+                  )}
+                </Item>
+              </StyledHeader>
+            )}
+          </ThemeContext.Consumer>
+        )}
+      </NavigationContext.Consumer>
     );
   }
 }
-
-const _SearchHeader = ReadingMode(SearchHeader);
-
-export default _SearchHeader;
-
-const styles = StyleSheet.create({
-  icon: {
-    fontSize: 20
-  }
-});

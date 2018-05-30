@@ -3,7 +3,6 @@ import { WebView, StyleSheet, View, StatusBar } from "react-native";
 import styled from "styled-components";
 
 import { RegularText } from "./AppText";
-import Icon from "./Icon";
 
 const BrowserHeader = styled.View`
   height: 50;
@@ -14,14 +13,6 @@ const BrowserHeader = styled.View`
 const BrowserTitle = styled(RegularText)`
   color: #fff;
   font-size: 14;
-`;
-const BrowserBottom = styled.View`
-  height: 50;
-  background-color: #eee;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  padding-horizontal: 10;
 `;
 
 export default class AppBrowser extends React.PureComponent {
@@ -46,34 +37,6 @@ export default class AppBrowser extends React.PureComponent {
           style={styles.browser}
           startInLoadingState={true}
         />
-        <BrowserBottom>
-          <Icon
-            name="arrow-left"
-            type="feather-icon"
-            onPress={() => this.browser.goBack()}
-            style={styles.icon}
-          />
-
-          <Icon
-            name="rotate-cw"
-            type="feather-icon"
-            onPress={() => this.browser.reload()}
-            style={styles.icon}
-          />
-
-          <Icon
-            name="arrow-right"
-            type="feather-icon"
-            onPress={() => this.browser.goForward()}
-            style={styles.icon}
-          />
-          <Icon
-            name="x"
-            type="feather-icon"
-            onPress={() => this.browser.stopLoading()}
-            style={styles.icon}
-          />
-        </BrowserBottom>
       </View>
     );
   }
@@ -85,9 +48,5 @@ const styles = StyleSheet.create({
   },
   browser: {
     flex: 1
-  },
-  icon: {
-    color: "#333",
-    fontSize: 20
   }
 });

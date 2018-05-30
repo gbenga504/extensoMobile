@@ -90,7 +90,6 @@ const titleHTML = text => `<p>${text}</p>`,
   };
 
 const Body = props => {
-  let contenter = `<p> The Educational state of this <b>country</b> has been something we didnt really like as a people. The government has been unfair`;
   let { title, content, src } = props;
   return (
     <ThemeContext.Consumer>
@@ -111,7 +110,7 @@ const Body = props => {
               style={titleStyle({ color: textColor })}
             />
             <CustomHTMLView
-              html={bodyHTML(contenter)}
+              html={bodyHTML(content)}
               style={bodyStyle({ color: textColor })}
               renderNode={(node, index, siblings, parent, defaultRenderer) =>
                 renderNode(node, index, siblings, parent, defaultRenderer, {
@@ -128,7 +127,7 @@ const Body = props => {
 
 Body.propTypes = {
   title: PropTypes.string.isRequired,
-  content: PropTypes.string.isRequired,
+  content: PropTypes.string,
   src: PropTypes.string
 };
 

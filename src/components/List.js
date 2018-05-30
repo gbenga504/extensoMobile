@@ -32,7 +32,7 @@ export default class List extends React.PureComponent {
       PropTypes.shape({
         id: PropTypes.string.isRequired,
         title: PropTypes.string.isRequired,
-        content: PropTypes.string.isRequired,
+        short_content: PropTypes.string.isRequired,
         category: PropTypes.string.isRequired,
         tags: PropTypes.any,
         created_at: PropTypes.string.isRequired,
@@ -49,7 +49,27 @@ export default class List extends React.PureComponent {
     isLoadingMore: PropTypes.bool,
     initialPageCount: PropTypes.number,
     category: PropTypes.string,
+    shouldPersistState: PropTypes.bool,
     fetchMore: PropTypes.oneOfType([PropTypes.object, PropTypes.func])
+  };
+
+  persistPageCountState = () => {
+    realm.write(() => {
+      let { pageCount } = this.state,
+        { category } = this.props;
+      if (pageCount == 0) {
+        realm.create("Pagination", {
+          category,
+          pageCount: pageCount + 1
+        });
+      } else {
+        realm.create(
+          "Pagination",
+          { category, pageCount: pageCount + 1 },
+          true
+        );
+      }
+    });
   };
 
   fetchMore = event => {
@@ -58,7 +78,7 @@ export default class List extends React.PureComponent {
         contentSize: { height },
         layoutMeasurement
       } = event.nativeEvent,
-      { fetchMore, category } = this.props,
+      { fetchMore, category, shouldPersistState } = this.props,
       { pageCount } = this.state;
     if (fetchMore) {
       if (height - layoutMeasurement.height == y) {
@@ -66,7 +86,7 @@ export default class List extends React.PureComponent {
           config: {
             params: {
               page: pageCount,
-              category
+              category: category || "all"
             }
           },
           updateQuery: (previousResult, { fetchMoreResult }) => {
@@ -75,21 +95,7 @@ export default class List extends React.PureComponent {
                 hasNextPage: false
               }));
             } else {
-              realm.write(() => {
-                let { pageCount } = this.state;
-                if (pageCount == 0) {
-                  realm.create("Pagination", {
-                    category,
-                    pageCount: pageCount + 1
-                  });
-                } else {
-                  realm.create(
-                    "Pagination",
-                    { category, pageCount: pageCount + 1 },
-                    true
-                  );
-                }
-              });
+              shouldPersistState && this.persistPageCountState();
               this.setState(prevState => ({
                 pageCount: prevState.pageCount + 1
               }));

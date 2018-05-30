@@ -2,9 +2,7 @@ import React from "react";
 import { DrawerNavigator } from "react-navigation";
 
 import Stack from "./Stack";
-import SettingsScreen from "../screens/SettingsScreen";
 import CustomDrawerContentComponent from "./CustomDrawerContentComponent";
-import GeneralSettings from "../screens/GeneralSettings";
 import BookmarkScreen from "../screens/BookmarkScreen";
 import NavigationProvider from "../containers/NavigationProvider";
 
@@ -20,11 +18,7 @@ const CustomDrawerContextDelegate = props => {
 const Drawer = DrawerNavigator(
   {
     Route: { screen: Stack },
-    bookmark: { screen: BookmarkScreen },
-    generalSound: {
-      screen: GeneralSettings
-    },
-    setting: { screen: SettingsScreen }
+    bookmark: { screen: BookmarkScreen }
   },
   {
     drawerOpenRoute: "DrawerOpen",

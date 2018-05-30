@@ -23,7 +23,7 @@ const StyledHeaderRightContainer = styled.View`
   align-self: flex-start;
 `;
 const StyledHeaderText = LightText.extend`
-  font-size: ${Fonts.content};
+  font-size: ${Fonts.appHeaderText};
   color: ${props => props.color || "#333"};
 `;
 const StyledIconContainer = styled.View`
@@ -74,7 +74,7 @@ export default class Header extends React.PureComponent {
 
   bookmark = () => {
     let {
-        item: { title, id, created_at },
+        item: { title, id, created_at, content },
         item,
         schemaType
       } = this.props,
@@ -97,6 +97,7 @@ export default class Header extends React.PureComponent {
           Object.assign({}, item, {
             bookmarked: true,
             schemaType,
+            short_content: content.replace(/<[^>]*>/gi, "").trim(),
             oid: parseInt(moment(created_at).format("x"))
           })
         );
@@ -111,6 +112,7 @@ export default class Header extends React.PureComponent {
             Object.assign({}, item, {
               bookmarked: true,
               schemaType,
+              short_content: content.replace(/<[^>]*>/gi, "").trim(),
               oid: parseInt(moment(created_at).format("x"))
             })
           );

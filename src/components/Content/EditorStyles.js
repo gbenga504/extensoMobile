@@ -28,6 +28,14 @@ const BodyStyles = props =>
       ...CommonStyles(props.color),
       fontFamily: "FreightTextProMedium"
     },
+    h3: {
+      ...CommonStyles(props.color),
+      fontFamily: "FreightTextProMedium"
+    },
+    h4: {
+      ...CommonStyles(props.color),
+      fontFamily: "FreightTextProMedium"
+    },
     i: {
       ...CommonStyles(props.color),
       fontStyle: "italic"

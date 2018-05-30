@@ -23,7 +23,7 @@ export default class CircleToAnimate extends React.PureComponent {
     Animated.sequence([
       Animated.timing(rotate, {
         toValue: 1,
-        duration: 1000,
+        duration: 800,
         useNativeDriver: true
       }),
       Animated.timing(moveBalls, {

@@ -6,6 +6,7 @@ import uuid from "uuid/v1";
 import KunyoraClient from "kunyora";
 import { KunyoraProvider } from "react-kunyora";
 import { Container } from "native-base";
+import { AsyncStorage } from "react-native";
 
 import App from "./App";
 import LoadingART from "./components/LoadingART";
@@ -14,7 +15,8 @@ import { appReducer } from "./reducers";
 import realm from "./realm.schema";
 import kunyoraConfig from "./kunyora.config";
 import RealmProvider from "./realmDB";
-import { SET_APP_ID } from "./actions/types";
+import { SET_APP_ID, SET_APPLICATION_THEME } from "./actions/types";
+import { themes } from "./context/ThemeContext";
 
 const store = createStore(
   combineReducers({
@@ -39,11 +41,40 @@ client.middleware({
 });
 
 export default class ExternalServiceIntegrations extends React.PureComponent {
-  state = {
-    isLoading: true
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoading: true
+    };
+  }
 
   componentDidMount() {
+    this.verifyUser();
+    this.getApplicationTheme();
+    setTimeout(() => {
+      this.setState({
+        isLoading: false
+      });
+    }, 6000);
+  }
+
+  getApplicationTheme = () => {
+    AsyncStorage.getItem("@extensoTheme", (error, result) => {
+      if (result !== null && !error) {
+        store.dispatch({
+          type: SET_APPLICATION_THEME,
+          theme: JSON.parse(result)
+        });
+      } else {
+        store.dispatch({
+          type: SET_APPLICATION_THEME,
+          theme: themes.light
+        });
+      }
+    });
+  };
+
+  verifyUser = () => {
     let User = realm.objects("User"),
       appid = null;
     if (User && User[0] && User[0].userId) {
@@ -59,13 +90,7 @@ export default class ExternalServiceIntegrations extends React.PureComponent {
       type: SET_APP_ID,
       appId: appid
     });
-
-    setTimeout(() => {
-      this.setState({
-        isLoading: false
-      });
-    }, 5000);
-  }
+  };
 
   render() {
     let { isLoading } = this.state;

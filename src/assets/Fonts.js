@@ -1,9 +1,4 @@
 export default {
-  headerTitle: 18,
-  headerIcon: 20,
-  title: 16,
-  content: 13,
-
   tabs: 18,
   icons: 18,
   tabLabel: 16,
@@ -11,5 +6,6 @@ export default {
   cardTitle: 18,
   cardContent: 13,
   errorText: 12,
-  errorIcon: 90
+  errorIcon: 90,
+  appHeaderText: 12
 };
