@@ -47,6 +47,7 @@ export default class ContentView extends React.PureComponent {
       contentCard: [],
       schemaType: undefined,
       bookmarked: false,
+      imagesLoadingState: {},
       imageWidth: 0,
       shouldComponentDisplay: false,
       categoryColor: ContentView.defaults.colors[Math.floor(Math.random() * 2)]
@@ -114,11 +115,10 @@ export default class ContentView extends React.PureComponent {
     });
   };
 
-  onLayout = e => {
+  onLayout = e =>
     this.setState({
       imageWidth: e.nativeEvent.layout.width
     });
-  };
 
   renderNode = (node, index, siblings, parent, defaultRenderer) => {
     let { imageWidth } = this.state;
@@ -126,6 +126,22 @@ export default class ContentView extends React.PureComponent {
       return (
         <StyledImage
           key={index}
+          onLoadStart={() =>
+            this.setState({
+              imagesLoadingState: {
+                ...this.state.imagesState,
+                [node.attribs.publicid]: true
+              }
+            })
+          }
+          onLoad={() =>
+            this.setState({
+              imagesLoadingState: {
+                ...this.state.imagesState,
+                [node.attribs.publicid]: false
+              }
+            })
+          }
           source={{
             uri: `https://res.cloudinary.com/gbenga504/image/upload/c_scale,h_${imageWidth},w_${imageWidth}/${
               node.attribs.publicid
@@ -134,10 +150,21 @@ export default class ContentView extends React.PureComponent {
         />
       );
     } else if (node.name == "figure") {
+      let _imageChildName = node.children[0].attribs.publicid,
+        { imagesLoadingState } = this.state;
+
       return (
         <ThemeContext.Consumer key={index}>
-          {({ theme: { imageBackgroundColor } }) => (
-            <StyledImageContainer backgroundColor={imageBackgroundColor}>
+          {({
+            theme: { imageBackgroundColor, loadedImageBackgroundColor }
+          }) => (
+            <StyledImageContainer
+              backgroundColor={
+                imagesLoadingState[_imageChildName]
+                  ? imageBackgroundColor
+                  : loadedImageBackgroundColor
+              }
+            >
               {defaultRenderer(node.children, parent)}
             </StyledImageContainer>
           )}

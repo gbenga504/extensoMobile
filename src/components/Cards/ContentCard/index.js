@@ -45,7 +45,8 @@ export default class ContentCard extends React.PureComponent {
 
   state = {
     isImageDisplayed: false,
-    imageWidth: 0
+    imageWidth: 0,
+    isImageLoading: true
   };
 
   onLayout = e => {
@@ -55,17 +56,23 @@ export default class ContentCard extends React.PureComponent {
     });
   };
 
-  renderDisplayImage = imageBackgroundColor => {
+  renderDisplayImage = (imageBackgroundColor, loadedImageBackgroundColor) => {
     let {
         item: { src }
       } = this.props,
-      { isImageDisplayed, imageWidth } = this.state;
+      { isImageDisplayed, imageWidth, isImageLoading } = this.state;
     return (
-      <StyledImageContainer backgroundColor={imageBackgroundColor}>
+      <StyledImageContainer
+        backgroundColor={
+          isImageLoading ? imageBackgroundColor : loadedImageBackgroundColor
+        }
+      >
         {src &&
           isImageDisplayed &&
           imageWidth !== 0 && (
             <StyledImage
+              onLoadStart={() => this.setState({ isImageLoading: true })}
+              onLoadEnd={() => this.setState({ isImageLoading: false })}
               source={{
                 uri: `http://res.cloudinary.com/gbenga504/image/upload/c_scale,h_${imageWidth},w_${imageWidth}/${src}`
               }}
@@ -87,7 +94,8 @@ export default class ContentCard extends React.PureComponent {
             seperatorColor,
             backgroundColor,
             textColor,
-            imageBackgroundColor
+            imageBackgroundColor,
+            loadedImageBackgroundColor
           }
         }) => (
           <View onLayout={this.onLayout}>
@@ -107,7 +115,10 @@ export default class ContentCard extends React.PureComponent {
                     backgroundColor={backgroundColor}
                     borderColor={seperatorColor}
                   >
-                    {this.renderDisplayImage(imageBackgroundColor)}
+                    {this.renderDisplayImage(
+                      imageBackgroundColor,
+                      loadedImageBackgroundColor
+                    )}
                     <StyledSection>
                       <Body title={title} color={textColor} />
                       <Footer

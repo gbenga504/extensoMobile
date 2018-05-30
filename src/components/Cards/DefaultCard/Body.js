@@ -89,46 +89,61 @@ const titleHTML = text => `<p>${text}</p>`,
     }
   };
 
-const Body = props => {
-  let { title, content, src } = props;
-  return (
-    <ThemeContext.Consumer>
-      {({ theme: { imageBackgroundColor, textColor } }) => (
-        <StyledContainer>
-          <StyledImageContainer backgroundColor={imageBackgroundColor}>
-            {props.src && (
-              <StyledImage
-                source={{
-                  uri: `http://res.cloudinary.com/gbenga504/image/upload/c_thumb,g_face,h_80,w_80/${src}`
-                }}
-              />
-            )}
-          </StyledImageContainer>
-          <StyledTextContainer>
-            <CustomHTMLView
-              html={titleHTML(title)}
-              style={titleStyle({ color: textColor })}
-            />
-            <CustomHTMLView
-              html={bodyHTML(content)}
-              style={bodyStyle({ color: textColor })}
-              renderNode={(node, index, siblings, parent, defaultRenderer) =>
-                renderNode(node, index, siblings, parent, defaultRenderer, {
-                  color: textColor
-                })
+export default class Body extends React.PureComponent {
+  state = {
+    isImageLoading: true
+  };
+
+  static propTypes = {
+    title: PropTypes.string.isRequired,
+    content: PropTypes.string,
+    src: PropTypes.string
+  };
+
+  render() {
+    let { title, content, src } = this.props,
+      { isImageLoading } = this.state;
+    return (
+      <ThemeContext.Consumer>
+        {({
+          theme: { imageBackgroundColor, textColor, loadedImageBackgroundColor }
+        }) => (
+          <StyledContainer>
+            <StyledImageContainer
+              backgroundColor={
+                isImageLoading
+                  ? imageBackgroundColor
+                  : loadedImageBackgroundColor
               }
-            />
-          </StyledTextContainer>
-        </StyledContainer>
-      )}
-    </ThemeContext.Consumer>
-  );
-};
-
-Body.propTypes = {
-  title: PropTypes.string.isRequired,
-  content: PropTypes.string,
-  src: PropTypes.string
-};
-
-export default Body;
+            >
+              {src && (
+                <StyledImage
+                  onLoadStart={() => this.setState({ isImageLoading: true })}
+                  onLoadEnd={() => this.setState({ isImageLoading: false })}
+                  source={{
+                    uri: `http://res.cloudinary.com/gbenga504/image/upload/c_thumb,g_face,h_80,w_80/${src}`
+                  }}
+                />
+              )}
+            </StyledImageContainer>
+            <StyledTextContainer>
+              <CustomHTMLView
+                html={titleHTML(title)}
+                style={titleStyle({ color: textColor })}
+              />
+              <CustomHTMLView
+                html={bodyHTML(content)}
+                style={bodyStyle({ color: textColor })}
+                renderNode={(node, index, siblings, parent, defaultRenderer) =>
+                  renderNode(node, index, siblings, parent, defaultRenderer, {
+                    color: textColor
+                  })
+                }
+              />
+            </StyledTextContainer>
+          </StyledContainer>
+        )}
+      </ThemeContext.Consumer>
+    );
+  }
+}
