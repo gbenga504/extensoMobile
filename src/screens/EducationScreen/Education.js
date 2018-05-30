@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet } from "react-native";
 import PropTypes from "prop-types";
 import _ from "lodash";
 import moment from "moment";
@@ -55,7 +55,6 @@ class Education extends React.PureComponent {
     return (
       <ToastNotifier>
         <View style={styles.container}>
-          <Text> Yoh!!! </Text>
           <List
             dataArray={feeds || []}
             loading={queryFeeds.loading}
