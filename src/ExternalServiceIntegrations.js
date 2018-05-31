@@ -7,6 +7,7 @@ import KunyoraClient from "kunyora";
 import { KunyoraProvider } from "react-kunyora";
 import { Container } from "native-base";
 import { AsyncStorage } from "react-native";
+import codePush from "react-native-code-push";
 
 import App from "./App";
 import LoadingART from "./components/LoadingART";
@@ -40,7 +41,7 @@ client.middleware({
   }
 });
 
-export default class ExternalServiceIntegrations extends React.PureComponent {
+class ExternalServiceIntegrations extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -105,3 +106,10 @@ export default class ExternalServiceIntegrations extends React.PureComponent {
     );
   }
 }
+
+const _ExternalServiceIntegrations = codePush({
+  checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
+  installMode: codePush.InstallMode.IMMEDIATE
+})(ExternalServiceIntegrations);
+
+export default _ExternalServiceIntegrations;
