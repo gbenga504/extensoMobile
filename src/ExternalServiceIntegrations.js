@@ -109,6 +109,7 @@ class ExternalServiceIntegrations extends React.PureComponent {
 
 const _ExternalServiceIntegrations = codePush({
   checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
+  updateDialog: true,
   installMode: codePush.InstallMode.IMMEDIATE
 })(ExternalServiceIntegrations);
 
